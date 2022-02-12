@@ -1,0 +1,30 @@
+// Simple method in JS
+
+const badgeButton = document.getElementsByClassName('modaldetailbutton');
+const url = 'localhost/mvc/controller/method';
+const table = 'tablename';
+
+for (i = 0; i < badgeButton.length; i++) {
+  badgeButton[i].addEventListener('click', (result) => {
+    const id = result.target.id;
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        const result = JSON.parse(xhr.responseText);
+        console.log(result); // show result as an array associative
+      }
+    };
+    xhr.open('POST', url, true);
+    xhr.send(JSON.stringify({ id: id, table: table }));
+  });
+}
+
+// Simple method in PHP using file_get_contents
+// controller.php
+public controller extends Controller {
+    public function method() {
+        $data = json_decode(file_get_contents("php://input"));
+        $result = json_encode($this->model('db_model')->getItemById($data->id, $data->table));
+        echo $result;
+    }
+}
