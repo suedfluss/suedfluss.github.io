@@ -1,0 +1,21 @@
+// To overcome CORS blocking and spending 4 hours headache when using vanilla JS AJAX, use fetch for better performance otherwise use JQuery
+// This is a sample code to implement fetch() in Asynchronous 
+
+const searchbutton = document.getElementById('searchbutton');
+const apikey = 'yourapikey';
+let url = 'publicurl';
+
+searchbutton.addEventListener('click', async () => {
+  const inputkey = document.getElementById('searchinput').value;
+  url = `${url}?apikey=${apikey}&s=${inputkey}`;
+  await fetch(url)
+    .then((success) => {
+      return success.json();
+    })
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
