@@ -1,0 +1,21 @@
+// To overcome CORS blocking and spending 4 hours headache when using vanilla JS AJAX, use fetch for better performance otherwise use JQuery
+// Thsi is a sample code to implement fetch()
+
+const searchbutton = document.getElementById('searchbutton');
+const apikey = 'yourapikey';
+let url = 'publicurl';
+
+searchbutton.addEventListener('click', () => {
+  const inputkey = document.getElementById('searchinput').value;
+  url = `${url}?apikey=${apikey}&s=${inputkey}`;
+  fetch(url)
+    .then((success) => {
+      return success.json();
+    })
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
