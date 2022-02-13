@@ -1,0 +1,65 @@
+<?php
+
+function getApi($method, $url, $data) {
+    $curl = curl_init();
+    switch($method) {
+        case "POST" :
+            curl_setopt($curl, CURLOPT_POST, 1);
+            if($data)
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            break;
+        case "PUT" :
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+            if($data)
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            break;
+        default:
+            if($data)
+                $url = sprintf("%s?%s", $url, http_build_query($data));
+    }
+
+    // Options
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+
+    // Execute
+    $result = curl_exec($curl);
+    if(!$result) { die ("Connection failure...");}
+    curl_close($curl);
+    return json_decode($result, true);
+}
+
+// Youtube data
+$data_array =  array(
+    "part" => 'statistics,snippet',
+    "id" => '11111111111111111111',
+    "key" => 'AIsdasdaasdadasda',
+);
+
+$data = getApi('GET', 'https://www.googleapis.com/youtube/v3/channels', $data_array);
+$title = $data['items'][0]['snippet']['title'];
+$subscribers = $data['items'][0]['statistics']['subscriberCount'];
+
+// Youtube video
+$video_array =  array(
+    "part" => 'snippet',
+    "channelId" => '11111111111111111111',
+    "key" => 'AIsdasdaasdadasda',
+    "order" => 'date',
+);
+
+$resultlength = 4; // Number of videos to show
+$videoid = [];
+$publishdate = [];
+$videotitle = [];
+$video = getApi('GET', 'https://www.googleapis.com/youtube/v3/search', $video_array);
+for ($i=0; $i<$resultlength; $i++) {
+    if (isset($video)) {
+        $videoid[$i] = $video['items'][$i]['id']['videoId'];
+        $publishdate[$i] = $video['items'][$i]['snippet']['publishedAt'];
+        $videotitle[$i] = $video['items'][$i]['snippet']['title'];
+    }
+}
+
+?>
