@@ -1,0 +1,47 @@
+Generate Google API Key
+
+STEP 1: Google Developers site
+1. Got to: https://developers.google.com/youtube
+2. Choose: Add YouTube Data > click: Overview 
+3. Click: "Google Developers Console" in "Create a project in the Google Developers Console and obtain authorization credentials so your application can submit API requests."
+4. Login with Google account
+
+STEP 2: Google Developers Console
+5. At left bar, click: Home > Dashboard
+6. Choose: New Project or Current Project (if already have one)
+7. In Dashboard, look at API section and click "APIs overview" (at the bottom of API section)
+
+STEP 3: APIs & Services Dashboard
+8. At left bar, choose Enabled APIs & Services > + Enable APIs & Services
+9. In "Search for APIs", input: Youtube
+10. Landed in Youtube Data API v3 > click: Enable
+
+STEP 4: Create Credential key (API Key)
+11. Create Credentials > Fill the form
+12. Choose: Public Data
+13. And voila! the API Key is now served. 
+
+(To directly check the credentials > Got Credentials at left bar > + Credentials > API Key)
+==============================
+
+Youtube API endpoints
+
+STEP 1: Google Developers site
+1. Got to: https://developers.google.com/youtube
+2. Choose: Add YouTube Data > click: Reference 
+3. At left bar: The list of Youtube endpoints
+
+STEP 2: Endpoints
+4. To get subscribers number choose "Channels" > Overview
+5. Go to statistics" > "subscriberCount"
+6. To get profile picture choose "Channels" > Overview
+7. Go to   "snippet" > "thumbnails" > "url"
+
+STEP 3: Videos
+8. To get videos choose "Search" > Overview
+9. Got ot "id" > "videoId"
+
+==============================
+
+Last: Embedding in API client
+
