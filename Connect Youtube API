@@ -41,6 +41,14 @@ STEP 3: Videos
 8. To get videos choose "Search" > Overview
 9. Got ot "id" > "videoId"
 
+STEP 4: Request
+9. To get the request method for thoses data choose "Channels" > List
+10. The URL: https://www.googleapis.com/youtube/v3/channels
+11. Request method: GET
+12. List of parameters. 
+  12.1. Required parameters: part (ex. part = snippet, statistics, status) and id (channel id)
+  12.2. Optional parameters: maxResults (ex. maxResults = 5, means only max. 5 results given).
+
 ==============================
 
 Last: Embedding in API client
