@@ -1,0 +1,110 @@
+### Combination of PHP, JS, Bootstrap 5.0
+
+### website content
+<!-- Begin content -->
+<a href="<?= BASEURL; ?>/data/update/<?= $row['id']; ?>" data-bs-toggle="modal" data-bs-target="#formModal" data-id="<?= $row['id']; ?>">Update</a>
+
+<!-- Modal section -->
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModal">Insert New Card</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"> 
+                <form action="<?= BASEURL; ?>/data/insert" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="id">
+                    <!-- Start input area -->
+                    <div class="row">
+                        <div class="col">
+                            <div class="card h-100">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="logogroup"><i class="bi bi-cloud-sun"></i> Logo</label>
+                                    <select class="form-select" name="logo" id="logogroup">
+                                        <option selected>Choose...</option>
+                                        <option value="a.jpg">A</option>
+                                        <option value="b.jpg">B</option>                                     
+                                    </select>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="categorygroup">Category</span>
+                                    <input type="text" name="category" id="category" class="form-control">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="dategroup"></i>Date</span>
+                                    <input type="date" name="date" id="date" class="form-control">
+                                </div>
+                          </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="submit" id="submit" class="btn btn-success me-md-2"><i class="bi bi-plus-square"></i> Insert new card</button> 
+                    </div>
+                    <!-- End input form -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End of content -->
+
+### PHP controller
+public function getupdate() {
+        $data = json_decode(file_get_contents("php://input"));
+        echo json_encode($this->model('Data_model')->getItemById($data->id));
+}
+
+public function update() {
+        if($this->model('Data_model')->update($_POST) > 0) {
+            header('Location: ' . BASEURL . '/data/index');
+            exit;
+        } else {
+            header('Location: ' . BASEURL . '/data/index');
+            exit;
+        }
+}
+
+
+### Javascript
+// Admin data card management
+const baseurl = 'yourdomainname';
+
+// If you're using the same modal form for "insert" and "update" you have to create a default form like follows
+
+const adminInsert = document.getElementById('insert');
+adminInsert.addEventListener('click', (result) => {
+  document.getElementById('titleModal').innerHTML = 'Insert New Card';
+  document.querySelector('#submit').innerHTML = 'Insert new card';
+  document.querySelector('.modal-body form').setAttribute('action', `${baseurl}/admin/insert`);
+});
+
+const adminUpdate = document.getElementsByClassName('adminupdate');
+
+const updatelogo = document.getElementById('logogroup');
+const updatecategory = document.getElementById('category');
+const updatedate = document.getElementById('date');
+const updateid = document.getElementById('id');
+
+for (i = 0; i < adminUpdate.length; i++) {
+  adminUpdate[i].addEventListener('click', (result) => {
+    document.getElementById('titleModal').innerHTML = 'Update Card';
+    document.querySelector('#submit').innerHTML = 'Update card';
+    document.querySelector('.modal-body form').setAttribute('action', `${baseurl}/admin/update`);
+    const dataID = result.target.getAttribute('data-id');
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        const result = JSON.parse(xhr.responseText);
+        updatelogo.value = result['logo'];
+        updatecategory.value = result['category'];
+        updatedate.value = result['date'];
+        updateid.value = result['id'];
+      }
+    };
+    xhr.open('POST', `${baseurl}/admin/getupdate`, true);
+    xhr.send(JSON.stringify({ id: dataID }));
+  });
+}
+
