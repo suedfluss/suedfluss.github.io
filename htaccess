@@ -1,7 +1,7 @@
-###Create file .htaccess in MVC environment
+###Create file .htaccess in MVC environment using Apache server
 ###Use code editor to create file .htaccess
 
-#@ Localhost:
+#@ Localhost: http://localhost/mvcfolder/public
 
 mvcfolder
 |- public
@@ -29,7 +29,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?url=$1 [L]
 
 
-#@ live domain:
+#@ live domain: https://www.domainname.com
 
 #public_html
 |- public
@@ -55,3 +55,4 @@ RewriteBase /public
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?url=$1 [L]
+
