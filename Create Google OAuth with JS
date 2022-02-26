@@ -1,0 +1,79 @@
+### Create optional signin with Google account to access the app
+### Google OAuth button available
+
+### 1. Goto: https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow
+### 2. Goto: https://console.developers.google.com/apis/library
+### 3. Create project (existing or new for example Youtube data API)
+### 4. Go to Dashboard -> API section
+### 5. Create API Keys (follow the instructions)
+### 6. Create OAuth 2.0 Client IDs (follow the instructions)
+### 7. Insert following snippet:
+
+### After <body>
+<!-- Google OAuth -->
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="YOURCLIENTID.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+### Placing the Google Signin button to create access to somewhere
+### Example:
+<p class="card-text downloadfile"><a href="<?= BASEURL; ?>/docs_gallery/mypdf.pdf"><small class="text-muted">Download file in PDF</small></a></p>
+<div class="g-signin2" data-onsuccess="onSignIn"></div>
+<small class="text-muted statement">.. to download PDF file</small>
+<button class="btn btn-secondary btn-sm signedoutbutton" type="button" onclick="signOut();">Sign out</button>
+
+### Before </body>
+    <script src="goauth.js"></script>
+  </body>
+</html>
+
+### 8. Create script file (ex.: goauth.js)
+
+// For Google OAuth
+
+// Signed In
+
+const downloadfile = document.querySelectorAll('.downloadfile');
+const gsignin = document.querySelectorAll('.g-signin2');
+const statement = document.querySelectorAll('.statement');
+const signedout = document.querySelectorAll('.signedoutbutton');
+
+for (let i = 0; i<gsignin.length; i++) {
+    downloadfile[i].style.display = 'none';
+    gsignin[i].style.display = 'block';
+    statement[i].style.display = 'block';
+    signedout[i].style.display = 'none';
+}
+
+function onSignIn(googleUser) {
+  let profile = googleUser.getBasicProfile();
+
+  for (let i = 0; i < gsignin.length; i++) {
+    downloadfile[i].style.display = 'block';
+    gsignin[i].style.display = 'none';
+    statement[i].style.display = 'none';
+    signedout[i].style.display = 'block';
+  }
+
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+
+// Signed Out
+
+function signOut() {
+  let auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    for (let i = 0; i < gsignin.length; i++) {
+      downloadfile[i].style.display = 'none';
+      gsignin[i].style.display = 'block';
+      statement[i].style.display = 'block';
+      signedout[i].style.display = 'none';
+    }
+    console.log('User signed out.');
+  });
+}
+
+### 9. Test
