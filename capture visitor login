@@ -1,0 +1,87 @@
+### PHP and JS
+
+#js script
+function onSignIn(googleUser) {
+  let profile = googleUser.getBasicProfile();
+
+  for (let i = 0; i < gsignin.length; i++) {
+    downloadfile[i].style.display = 'block';
+    gsignin[i].style.display = 'none';
+    statement[i].style.display = 'none';
+    signedout[i].style.display = 'block';
+  }
+
+  let today = new Date();
+  let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + '/' + today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      console.log('User signed in');
+    }
+  };
+  xhr.open('POST', 'http://localhost/newww/public/home/visitorlogin', true);
+  xhr.send(
+    JSON.stringify({
+      loginid: profile.getId(),
+      loginname: profile.getName(),
+      loginemail: profile.getEmail(),
+      loginimg: profile.getImageUrl(),
+      logindate: date,
+      loginlocation: '',
+    })
+  );
+}
+
+#PHP model
+
+public function visitorlogin() {
+        $visitordata = file_get_contents("php://input"); // capture data (object) from frontend (xhr.send());
+        $googledata = file_get_contents('googlesignin.json'); // create new json file (if it doesn't exist)
+        $tempArray = json_decode($googledata); // convert to Array of object
+        array_push($tempArray, $visitordata); // push new object
+        $jsonData = json_encode($tempArray); // convert to json
+        file_put_contents('googlesignin.json', $jsonData); //put the new object into json file
+        $googledata = file_get_contents('googlesignin.json'); // get data content (optional)
+        echo $googledata; // send back to frontend (optional)
+}
+
+public function visitorview() {
+        $data['title'] = " - Visitors view";
+         $visitorsdata = file_get_contents('googlesignin.json'); // get data content from a json file
+        $data['visitors'] = json_decode($visitorsdata); // convert to Array of object
+        $this->view('admin/visitorview', $data); // send to frontend
+}
+
+## View
+<div class="container">
+    <table class="table caption-top">
+    <caption>List of visitors</caption>
+    <thead>
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">ID</th>     
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Image</th>
+        <th scope="col">Date</th>
+        <th scope="col">Location</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php $i=1 ?>
+    <?php foreach($data['visitors'] as $row) : ?>
+        <tr>
+            <th scope="row"><?= $i++; ?></th>
+            <td><?= json_decode($row)->loginid; ?></td>
+            <td><?= json_decode($row)->loginname; ?></td>
+            <td><?= json_decode($row)->loginemail; ?></td>
+            <td><?= json_decode($row)->loginimg; ?></td>
+            <td><?= json_decode($row)->logindate; ?></td>
+            <td><?= json_decode($row)->loginlocation; ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+    </table>
+</div>
+
+
