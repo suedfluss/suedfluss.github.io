@@ -1,0 +1,50 @@
+### Adding custom search engine from bootstrap input form integrated eith Google search engine
+
+### 1. Create new project
+https://programmablesearchengine.google.com/create/new
+
+The most important section is the Search Engine ID
+Public URL
+Ex.: https://cse.google.com/cse?cx=SearchEngineID
+
+Input the search engine name with whatever name and so on.
+
+Finally, click "Get code" and it shoud give following like snippet:
+<script async src="https://cse.google.com/cse.js?cx=SearchEngineID"></script>
+
+### 2. Look at the documentation
+https://developers.google.com/custom-search/docs/element
+
+Choose 
+<div class="gcse-searchresults-only"></div>
+for the result only section
+
+
+### 3. <Head> and <body> section in the web page
+
+Copy & paste the given script snippet from #1 before </head> tag and #2 after <body> tacg
+
+<head>
+// some code etc...
+
+<script async src="https://cse.google.com/cse.js?cx=SearchEngineID"></script>
+</head>
+<body>
+<div class="gcse-searchresults-only"></div>
+
+// body content etc...
+
+### 4. Create input form with bootstrap
+<form action="" method="get" class="d-flex" role="search">
+  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
+  <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+Please note:
+1. action="" point to the current page for whosing the search result.
+2. method="get" will add a "?" in the URL
+3. "name" in <input> tag is important because it will send the query to the URL --> q=
+
+ex.: https://www.chocoicecream.com/home/?q=yourkeywords
+
+done...
